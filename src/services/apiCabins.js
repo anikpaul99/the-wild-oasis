@@ -17,6 +17,25 @@ export async function getCabins() {
 }
 
 /**
+ * Will create a new cabin in the database
+ * @param {Object} newCabin the new cabin to be created
+ * @author Anik Paul
+ */
+export async function createCabin(newCabin) {
+  const { data, error } = await supabase
+    .from("cabins")
+    .insert([newCabin])
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error(`Cabin could not be created`);
+  }
+
+  return data;
+}
+
+/**
  * Will delete a cabin
  * @param {string} id the id of the cabin to be deleted
  * @author Anik Paul
