@@ -19,6 +19,7 @@ export async function getCabins() {
 /**
  * Will create a new cabin in the database
  * @param {Object} newCabin the new cabin to be created
+ * @returns {Object} Object containing info about newly created or updated cabin. Contained props are: 'created_at', 'description', 'discount', 'id', 'image', 'maxCapacity', 'name', 'regularPrice'.
  * @author Anik Paul
  */
 export async function createEditCabin(newCabin, id) {
