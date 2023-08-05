@@ -12,10 +12,12 @@ import { useUpdateCabin } from "./useUpdateCabin";
 
 /**
  * Form to create a new cabin
+ * @prop {Object} cabinToUpdate cabin object to be updated
+ * @prop {func} onCloseModal function to close the modal
  * @returns {JSX.Element}
  * @author Anik Paul
  */
-function CreateCabinForm({ cabinToUpdate = {} }) {
+function CreateCabinForm({ cabinToUpdate = {}, onCloseModal }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { isUpdating, updateCabin } = useUpdateCabin();
   const isWorking = isCreating || isUpdating;
@@ -37,6 +39,7 @@ function CreateCabinForm({ cabinToUpdate = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -46,13 +49,17 @@ function CreateCabinForm({ cabinToUpdate = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -135,7 +142,11 @@ function CreateCabinForm({ cabinToUpdate = {} }) {
       </FormRow>
 
       <FormRow>
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>
