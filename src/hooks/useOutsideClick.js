@@ -14,9 +14,6 @@ export function useOutsideClick(handler, listenCapturing = true) {
     function () {
       function handleClick(e) {
         if (ref.current && !ref.current.contains(e.target)) {
-          console.log(ref.current);
-          console.log(e.target);
-          console.log(ref.current.contains(e.target));
           handler();
         }
       }
