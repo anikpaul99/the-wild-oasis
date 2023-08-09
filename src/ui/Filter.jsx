@@ -1,0 +1,73 @@
+import styled, { css } from "styled-components";
+import { useSearchParams } from "react-router-dom";
+
+const StyledFilter = styled.div`
+  border: 1px solid var(--color-grey-100);
+  background-color: var(--color-grey-0);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-sm);
+  padding: 0.4rem;
+  display: flex;
+  gap: 0.4rem;
+`;
+
+const FilterButton = styled.button`
+  background-color: var(--color-grey-0);
+  border: none;
+
+  ${(props) =>
+    props.active &&
+    css`
+      background-color: var(--color-brand-600);
+      color: var(--color-brand-50);
+    `}
+
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  font-size: 1.4rem;
+  padding: 0.44rem 0.8rem;
+  transition: all 0.3s;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-brand-600);
+    color: var(--color-brand-50);
+  }
+`;
+
+/**
+ * Filter component which contains buttons to filter data with some specific categories.
+ * @prop {string} filterField The name of the filed, on which the filter will be based on. e.g. "discount".
+ * @prop {Object []} options Each option object will contain the "value" that will be set to the URL and the "label" to be displayed on the UI. => e.g. ({ value: "with-discount", label: "With discount" }).
+ * @returns {JSX.Element}
+ * @author Anik Paul
+ */
+function Filter({ filterField, options }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentFilter = searchParams.get(filterField) || options.at(0).value;
+
+  /**
+   * Will be executed when clicked on any of the filter buttons. Will set the URL with 'filterField' params setting it to a value that is comming from one of the filter buttons which is 'option.value'. => (The format will be : "filterField=option.value". e.g. "discount=with-discount".
+   * @param {string} value The value that will be set to the URL. => (e.g. "all" / "no-discount" / "with-discount").
+   * @author Anik Paul
+   */
+  function handleClick(value) {
+    searchParams.set(filterField, value);
+    setSearchParams(searchParams);
+  }
+
+  return (
+    <StyledFilter>
+      {options.map((option) => (
+        <FilterButton
+          key={option.value}
+          onClick={() => handleClick(option.value)}
+          active={option.value === currentFilter}
+        >
+          {option.label}
+        </FilterButton>
+      ))}
+    </StyledFilter>
+  );
+}
+
+export default Filter;
