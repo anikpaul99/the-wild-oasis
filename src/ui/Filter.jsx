@@ -37,7 +37,7 @@ const FilterButton = styled.button`
 /**
  * Filter component which contains buttons to filter data with some specific categories.
  * @prop {string} filterField The name of the filed, on which the filter will be based on. e.g. "discount".
- * @prop {Object []} options Each option object will contain the "value" that will be set to the URL and the "label" to be displayed on the UI. => e.g. ({ value: "with-discount", label: "With discount" }).
+ * @prop {Object []} options Each option object will contain the "value" that will be set to the URL and the "label" to be displayed on the UI. => e.g. { value: "with-discount", label: "With discount" }.
  * @returns {JSX.Element}
  * @author Anik Paul
  */
@@ -62,6 +62,7 @@ function Filter({ filterField, options }) {
           key={option.value}
           onClick={() => handleClick(option.value)}
           active={option.value === currentFilter}
+          disabled={option.value === currentFilter}
         >
           {option.label}
         </FilterButton>
