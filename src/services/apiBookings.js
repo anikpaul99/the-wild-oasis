@@ -43,3 +43,24 @@ export async function getBookings({ filter, sortBy, page }) {
 
   return { data, count };
 }
+
+/**
+ * Will fetch a single booking data matched by the id passed into the function from the database.
+ * @param {string} id The id (from the URL) of the booking  which data will be fetched from the database.
+ * @returns {Object} The booking data along with cabin data and guest data for that particular id.
+ * @author Anik Paul
+ */
+export async function getBooking(id) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, cabins(*), guests(*)")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking not found");
+  }
+
+  return data;
+}
