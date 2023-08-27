@@ -64,3 +64,25 @@ export async function getBooking(id) {
 
   return data;
 }
+
+/**
+ * Will update the booking data in the database for a particular booking with a particular id.
+ * @param {string} id The id of the booking  which needs to be updated.
+ * @param {Object} obj An object with all the new updated field values.
+ * @returns {Object} The updated booking data.
+ * @author Anik Paul
+ */
+export async function updateBooking(id, obj) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .update(obj)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be updated");
+  }
+  return data;
+}
