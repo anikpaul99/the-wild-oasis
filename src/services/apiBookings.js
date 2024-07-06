@@ -86,3 +86,19 @@ export async function updateBooking(id, obj) {
   }
   return data;
 }
+
+/**
+ * Will delete the booking data in the database for a particular booking with a particular id.
+ * @param {string} id The id of the booking  which needs to be updated.
+ * @returns {undefined}
+ * @author Anik Paul
+ */
+export async function deleteBooking(id) {
+  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be deleted");
+  }
+  return data;
+}
