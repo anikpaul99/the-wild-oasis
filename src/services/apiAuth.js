@@ -18,3 +18,19 @@ export async function login({ email, password }) {
 
   return data;
 }
+
+/**
+ * This function will be responsible to load the authenticated user from supabase. For one of the usecase which is to enable a logged in user to access the app late.
+ * @returns {Object} Will return the logged in user infor.
+ * @author Anik Paul
+ */
+export async function getCurrentUser() {
+  const { data: session } = await supabase.auth.getSession();
+  if (!session.session) return null;
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) throw new Error(error.message);
+
+  return data?.user;
+}
