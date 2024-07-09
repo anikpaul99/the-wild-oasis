@@ -34,3 +34,12 @@ export async function getCurrentUser() {
 
   return data?.user;
 }
+
+/**
+ * This function will be responsible to sign out the user from application by removing the authentication session which comes from supabase.
+ * @author Anik Paul
+ */
+export async function logout() {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw new Error(error.message);
+}
