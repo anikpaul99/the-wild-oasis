@@ -1,6 +1,31 @@
 import supabase from "./supabase";
 
 /**
+ * This function is responsible to sign up a user in the supabase with the corresponding data.
+ * @param {string} fullName The full name the user will use to sign up.
+ * @prop {string} email The email the user will use to sign up.
+ * @prop {string} password The password the user will use to sign up.
+ * @returns {Object} This object will  contain 'session' and 'user' property. The 'session' prop is the 'active session' which will include info about jwt token. The 'user' prop will contain info about the newly created user info.
+ * @author Anik Paul
+ */
+export async function signup({ fullName, email, password }) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        fullName,
+        avatar: "",
+      },
+    },
+  });
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
+/**
  * If an account is created, users can login to the app. After they have logged in, all interactions using the Supabase JS client will be performed as "that user".
  * @param {Object} object with email and password prop.
  * @prop {string} email The email the user will use to login.
