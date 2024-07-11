@@ -1,8 +1,8 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 /**
  * This function is responsible to sign up a user in the supabase with the corresponding data.
- * @param {string} fullName The full name the user will use to sign up.
+ * @prop {string} fullName The full name the user will use to sign up.
  * @prop {string} email The email the user will use to sign up.
  * @prop {string} password The password the user will use to sign up.
  * @returns {Object} This object will  contain 'session' and 'user' property. The 'session' prop is the 'active session' which will include info about jwt token. The 'user' prop will contain info about the newly created user info.
@@ -67,4 +67,43 @@ export async function getCurrentUser() {
 export async function logout() {
   const { error } = await supabase.auth.signOut();
   if (error) throw new Error(error.message);
+}
+
+/**
+ * This function will be responsible to update the users full name, avatar and password.
+ * @prop {string} fullName The full name the user will want to update.
+ * @prop {string} email The email the user will want to update.
+ * @prop {string} password The password the user will want to update.
+ * @returns {Object} This object will contain the updated users info.
+ * @author Anik Paul
+ */
+export async function updateCurrentUser({ password, fullName, avatar }) {
+  // 1. Update password OR fullName
+  let updateData;
+  if (password) updateData = { password };
+  if (fullName) updateData = { data: { fullName } };
+
+  const { data, error } = await supabase.auth.updateUser(updateData);
+
+  if (error) throw new Error(error.message);
+  if (!avatar) return data;
+
+  // 2. Upload the avatar image
+  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+
+  const { error: storageError } = await supabase.storage
+    .from("avatars")
+    .upload(fileName, avatar);
+
+  if (storageError) throw new Error(storageError.message);
+
+  // 3. Update avatar in the user
+  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    },
+  });
+
+  if (error2) throw new Error(error2.message);
+  return updatedUser;
 }
