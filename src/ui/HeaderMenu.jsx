@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Logout from "../features/authentication/Logout";
 import ButtonIcon from "./ButtonIcon";
+import DarkModeToggle from "./DarkModeToggle";
 
 /**
  * Small menu that will include two buttons to go to account page and do logout.
@@ -24,6 +25,9 @@ function HeaderMenu() {
         <ButtonIcon onClick={() => navigate("/account")}>
           <HiOutlineUser />
         </ButtonIcon>
+      </li>
+      <li>
+        <DarkModeToggle />
       </li>
       <li>
         <Logout />
