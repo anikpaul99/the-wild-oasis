@@ -66,6 +66,68 @@ export async function getBooking(id) {
 }
 
 /**
+ * It returns all the 'BOOKINGS' from the supabase that were created after the given "date".
+ * @param {string} date This is a date that is already 7/30/90 days ago from today.
+ * @returns {object[]} Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
+ * @author Anik Paul
+ */
+export async function getBookingsAfterDate(date) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("created_at, totalPrice, extrasPrice")
+    .gte("created_at", date)
+    .lte("created_at", getToday({ end: true }));
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bookings could not get loaded");
+  }
+  return data;
+}
+
+/**
+ * It returns all the 'STAYS' from the supabase that were created after the given "date".
+ * @param {string} date This is a date that is already 7/30/90 days ago from today.
+ * @returns {object[]} Returns all STAYS that were created after the given date. Useful to get stays created in the last 90 days, for example.
+ * @author Anik Paul
+ */
+export async function getStaysAfterDate(date) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, guests(fullName)")
+    .gte("startDate", date)
+    .lte("startDate", getToday());
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bookings could not get loaded");
+  }
+
+  return data;
+}
+
+/**
+ * It returns the data of the guests that will either check in or check out from the hotel, in the current day.
+ * @returns {object[]} Returns the data of the guests that will either check in or check out from the hotel, in the current day.
+ * @author Anik Paul
+ */
+export async function getStaysTodayActivity() {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, guests(fullName, nationality, countryFlag)")
+    .or(
+      `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+    )
+    .order("created_at");
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bookings could not get loaded");
+  }
+  return data;
+}
+
+/**
  * Will update the booking data in the database for a particular booking with a particular id.
  * @param {string} id The id of the booking  which needs to be updated.
  * @param {Object} obj An object with all the new updated field values.
