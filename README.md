@@ -153,6 +153,15 @@ Below are screenshots showcasing different parts of the application:
 10. **Hotel Settings Page** (`/settings`):
     ![Hotel Settings Page](screenshots/update%20hotel%20setting%20in%20wild%20oasis.png)
 
+## Demo Access
+
+This project is a private internal application with a secure authentication system, and access is restricted to hotel staff accounts. However, if you're a recruiter or developer and would like to explore the app for evaluation purposes, feel free to reach out.
+
+- ✅ I’ll be happy to provide demo access upon request.
+- 🔒 Sign-up is disabled for public users to maintain security.
+
+Please contact me via email or LinkedIn (links below), and I’ll send you access credentials along with guidance on how to use the app.
+
 ## Contact
 
 For any inquiries or further information, please feel free to reach out:
